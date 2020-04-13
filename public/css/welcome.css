@@ -1,0 +1,22 @@
+
+body {
+  background-color: #3c763d;
+  
+
+}
+.ceneter{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%)
+}
+
+.ceneter h1 {
+  color:white;
+  font-weight: bold;
+}
+
+
+
+
+
