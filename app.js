@@ -1,4 +1,4 @@
-let express, app, bodyparser, request, https;
+let express, app, bodyparser, request, https,key;
 //init function
 function init() {
     //require part
@@ -6,11 +6,13 @@ function init() {
     bodyparser = require("body-parser");
     request = require("request");
     https = require("https");
+    key=require("./apiKey.js");
+    console.log('key :', key);
     app = new express();
     app.use(bodyparser.urlencoded({ extended: true }));
     app.use(express.static("public"));
     app.get('/', (req, res) => {
-        res.sendFile(__dirname + "/index.html");
+        res.sendFile(__dirname + "/public/views/index.html");
     });
     app.listen(process.env.PORT|| 3000, () => {
         console.log(`Server started on 3000`);
@@ -23,7 +25,6 @@ app.post('/signup', (req, res) => {
     let fname = req.body.Fname;
     let lname = req.body.Lname;
     let email = req.body.email;
-    let status = 0;
     let data = {
         members: [
             {
@@ -42,15 +43,13 @@ app.post('/signup', (req, res) => {
     let url = "https://us19.api.mailchimp.com/3.0/lists/39a1eae912"
     let options = {
         method: "POST",
-        auth: "Saleh:5ff6c4546b445bf15a4a46ba6fa9f38d-us19"
+        auth: `Saleh:${key}`
     }
     let request = https.request(url, options, response => {
+        (response.statusCode == 200) ? res.sendFile(__dirname + "/public/views/welcome.html") : res.sendFile(__dirname + "/public/views/fail.html");
+        // response.on("data", (data) => {
 
-        (response.statusCode == 200) ? res.sendFile(__dirname + "/welcome.html") : res.sendFile(__dirname + "/fail.html");
-
-        response.on("data", (data) => {
-
-        })
+        // })
     })
     request.write(jsonData);
 
@@ -63,6 +62,7 @@ app.post('/signup', (req, res) => {
 app.post('/tryAgain', (req, res) => {
      res.redirect("/");
 });
+
 
 
 
